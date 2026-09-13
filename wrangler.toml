@@ -1,0 +1,7 @@
+name = "grocery-price-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+AIRTABLE_BASE_ID = "appNACAjjtIM1iv3X"
+AIRTABLE_TABLE_ID = "tblUotcepDkfJpoSe"
