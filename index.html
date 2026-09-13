@@ -95,12 +95,12 @@
   tbody tr{transition:background .12s;}
   tbody tr:hover{background:var(--panel3);}
   .item-row{display:flex;align-items:center;gap:12px;}
-  .item-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);position:relative;}
+  .item-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
   .item-icon.veg{background:var(--veg-tint);}
   .item-icon.fruit{background:var(--fruit-tint);}
   .item-icon.meat{background:var(--meat-tint);}
   .item-icon.fish{background:var(--fish-tint);}
-  .item-flag{position:absolute;right:-4px;bottom:-4px;width:16px;height:16px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
+  .item-flag{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;background:var(--panel2);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
   .item-text{min-width:0;}
   .item-name{font-weight:600;letter-spacing:0.1px;}
   .item-cat{color:var(--muted-dim);font-size:10.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
@@ -501,7 +501,8 @@ function renderTable(){
     return `<tr>
       <td>
         <div class="item-row">
-          <div class="item-icon ${CATEGORY_CLASS[it.cat]}">${iconFor(it)}${flagFor(it) ? `<span class="item-flag">${flagFor(it)}</span>` : ''}</div>
+          <div class="item-icon ${CATEGORY_CLASS[it.cat]}">${iconFor(it)}</div>
+          ${flagFor(it) ? `<div class="item-flag">${flagFor(it)}</div>` : ''}
           <div class="item-text">
             <div class="item-name">${it.name}</div>
             <div class="item-cat">${it.cat}</div>
