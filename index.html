@@ -406,6 +406,7 @@ function renderTable(){
     if(q && !it.name.toLowerCase().includes(q)) return false;
     return true;
   });
+  rows.sort((a,b)=>a.name.localeCompare(b.name));
 
   if(!rows.length){
     tbody.innerHTML = `<tr><td colspan="${STORES.length+3}"><div class="empty-state"><span class="big">🔍</span>No items match. Try clearing the search or adding one.</div></td></tr>`;
@@ -559,7 +560,8 @@ async function saveNewItem(){
 
 function exportCSV(){
   const rows = [['Item','Category', ...STORES.flatMap(s=>[STORE_LABEL[s]+' (AED/kg)', STORE_LABEL[s]+' URL']), 'Best store']];
-  state.items.forEach(it=>{
+  const sortedItems = [...state.items].sort((a,b)=> a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name));
+  sortedItems.forEach(it=>{
     const best = bestStore(it.id);
     rows.push([
       it.name, it.cat,
