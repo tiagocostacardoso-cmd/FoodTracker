@@ -100,7 +100,8 @@
   .item-icon.fruit{background:var(--fruit-tint);}
   .item-icon.meat{background:var(--meat-tint);}
   .item-icon.fish{background:var(--fish-tint);}
-  .item-flag{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;background:var(--panel2);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
+  .item-flag{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none;background:var(--panel2);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);overflow:hidden;}
+  .item-flag img{width:24px;height:18px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,0.08);}
   .item-text{min-width:0;}
   .item-name{font-weight:600;letter-spacing:0.1px;}
   .item-cat{color:var(--muted-dim);font-size:10.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
@@ -239,28 +240,31 @@ function iconFor(it){ return ITEM_EMOJI[it.id] || CATEGORY_EMOJI[it.cat] || '�
 // Origin-country flag shown as a small badge on the item icon. Only set where
 // the product's origin is confirmed (from its catalog name or the retailer's
 // product page) — omitted rather than guessed for items without a stated origin.
-const ORIGIN_FLAG = {
-  'cucumber-uae':'🇦🇪', 'potato-local':'🇱🇧', 'onion-red-india':'🇮🇳',
-  'garlic-white-china':'🇨🇳', 'broccoli-spain':'🇪🇸',
-  'banana-chiquita-ecuador':'🇪🇨', 'lemon-south-africa':'🇿🇦',
-  'lamb-chops':'🇦🇺', 'beef-ribeye-australian':'🇦🇺', 'beef-ribeye-south-african':'🇿🇦',
-  'lamb-leg-boneless':'🇦🇺', 'beef-topside-australian':'🇦🇺', 'beef-topside-brazilian':'🇧🇷',
-  'beef-topside-south-african':'🇿🇦', 'beef-rump-australian':'🇦🇺', 'beef-knuckle-australian':'🇦🇺',
-  'beef-ribeye-wagyu':'🇦🇺', 'beef-cubes-australian':'🇦🇺', 'beef-liver-australian':'🇦🇺',
-  'lamb-shoulder':'🇦🇺', 'lamb-shank':'🇦🇺', 'lamb-mince':'🇦🇺', 'mutton-ribs-indian':'🇮🇳',
-  'salmon-fillet-norwegian':'🇳🇴', 'hammour-fillet':'🇦🇪', 'salmon-fillet-scottish':'🇬🇧',
-  'salmon-trout-fillet':'🇳🇴', 'rabbitfish-safi':'🇦🇪', 'tilapia-fresh':'🇪🇬',
-  'capsicum-mixed':'🇦🇪', 'cauliflower':'🇯🇴', 'eggplant':'🇦🇪', 'mushroom-white':'🇴🇲',
-  'apple-pink-lady':'🇫🇷', 'orange-valencia':'🇿🇦', 'watermelon':'🇹🇷',
-  'grapes-white-seedless':'🇮🇹', 'grapes-red-seedless':'🇮🇹', 'mango':'🇧🇷', 'strawberry':'🇿🇦',
-  'chicken-breast-boneless':'🇦🇪', 'chicken-whole-fresh':'🇦🇪', 'beef-mince-18':'🇦🇺',
-  'chicken-thighs':'🇦🇪', 'chicken-wings':'🇦🇪', 'chicken-drumsticks':'🇦🇪',
-  'chicken-mince':'🇦🇪', 'chicken-liver':'🇦🇪',
-  'seabream-red':'🇹🇳', 'tuna-steak':'🇮🇩', 'kingfish-steak':'🇦🇪', 'sea-bass-whole':'🇹🇷',
-  'silver-pomfret':'🇦🇪', 'squid-fresh':'🇦🇪', 'crab-blue':'🇦🇪', 'mackerel-fresh':'🇦🇪',
-  'sardines-fresh':'🇦🇪', 'trevally-sherri':'🇦🇪', 'milk-fish-whole':'🇵🇭',
+// ISO 3166-1 alpha-2 codes, rendered as real flag icons (flagcdn.com) rather
+// than Unicode flag emoji — Windows browsers lack color flag glyphs and show
+// two-letter codes instead, so an image keeps the flag consistent everywhere.
+const ORIGIN_COUNTRY = {
+  'cucumber-uae':'ae', 'potato-local':'lb', 'onion-red-india':'in',
+  'garlic-white-china':'cn', 'broccoli-spain':'es',
+  'banana-chiquita-ecuador':'ec', 'lemon-south-africa':'za',
+  'lamb-chops':'au', 'beef-ribeye-australian':'au', 'beef-ribeye-south-african':'za',
+  'lamb-leg-boneless':'au', 'beef-topside-australian':'au', 'beef-topside-brazilian':'br',
+  'beef-topside-south-african':'za', 'beef-rump-australian':'au', 'beef-knuckle-australian':'au',
+  'beef-ribeye-wagyu':'au', 'beef-cubes-australian':'au', 'beef-liver-australian':'au',
+  'lamb-shoulder':'au', 'lamb-shank':'au', 'lamb-mince':'au', 'mutton-ribs-indian':'in',
+  'salmon-fillet-norwegian':'no', 'hammour-fillet':'ae', 'salmon-fillet-scottish':'gb',
+  'salmon-trout-fillet':'no', 'rabbitfish-safi':'ae', 'tilapia-fresh':'eg',
+  'capsicum-mixed':'ae', 'cauliflower':'jo', 'eggplant':'ae', 'mushroom-white':'om',
+  'apple-pink-lady':'fr', 'orange-valencia':'za', 'watermelon':'tr',
+  'grapes-white-seedless':'it', 'grapes-red-seedless':'it', 'mango':'br', 'strawberry':'za',
+  'chicken-breast-boneless':'ae', 'chicken-whole-fresh':'ae', 'beef-mince-18':'au',
+  'chicken-thighs':'ae', 'chicken-wings':'ae', 'chicken-drumsticks':'ae',
+  'chicken-mince':'ae', 'chicken-liver':'ae',
+  'seabream-red':'tn', 'tuna-steak':'id', 'kingfish-steak':'ae', 'sea-bass-whole':'tr',
+  'silver-pomfret':'ae', 'squid-fresh':'ae', 'crab-blue':'ae', 'mackerel-fresh':'ae',
+  'sardines-fresh':'ae', 'trevally-sherri':'ae', 'milk-fish-whole':'ph',
 };
-function flagFor(it){ return ORIGIN_FLAG[it.id] || null; }
+function flagFor(it){ return ORIGIN_COUNTRY[it.id] || null; }
 
 function emptyPrices(){
   const o = {};
@@ -502,7 +506,7 @@ function renderTable(){
       <td>
         <div class="item-row">
           <div class="item-icon ${CATEGORY_CLASS[it.cat]}">${iconFor(it)}</div>
-          ${flagFor(it) ? `<div class="item-flag">${flagFor(it)}</div>` : ''}
+          ${flagFor(it) ? `<div class="item-flag"><img src="https://flagcdn.com/${flagFor(it)}.svg" alt="${flagFor(it).toUpperCase()}" loading="lazy"></div>` : ''}
           <div class="item-text">
             <div class="item-name">${it.name}</div>
             <div class="item-cat">${it.cat}</div>
