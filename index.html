@@ -95,11 +95,12 @@
   tbody tr{transition:background .12s;}
   tbody tr:hover{background:var(--panel3);}
   .item-row{display:flex;align-items:center;gap:12px;}
-  .item-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
+  .item-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);position:relative;}
   .item-icon.veg{background:var(--veg-tint);}
   .item-icon.fruit{background:var(--fruit-tint);}
   .item-icon.meat{background:var(--meat-tint);}
   .item-icon.fish{background:var(--fish-tint);}
+  .item-flag{position:absolute;right:-4px;bottom:-4px;width:16px;height:16px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
   .item-text{min-width:0;}
   .item-name{font-weight:600;letter-spacing:0.1px;}
   .item-cat{color:var(--muted-dim);font-size:10.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
@@ -228,8 +229,29 @@ const ITEM_EMOJI = {
   'salmon-fillet-norwegian':'🐟', 'hammour-fillet':'🐟', 'seabream-red':'🐟',
   'salmon-fillet-scottish':'🐟', 'salmon-trout-fillet':'🐟', 'tuna-steak':'🐟',
   'kingfish-steak':'🐟', 'sea-bass-whole':'🐟', 'silver-pomfret':'🐟',
+  'shrimp-large':'🦐', 'tiger-shrimp-large':'🦐', 'squid-fresh':'🦑', 'crab-blue':'🦀',
+  'mackerel-fresh':'🐟', 'sardines-fresh':'🐟', 'rabbitfish-safi':'🐟',
+  'trevally-sherri':'🐟', 'tilapia-fresh':'🐟', 'milk-fish-whole':'🐟',
+  'red-mullet-sultan-ibrahim':'🐟',
 };
 function iconFor(it){ return ITEM_EMOJI[it.id] || CATEGORY_EMOJI[it.cat] || '🛒'; }
+
+// Origin-country flag shown as a small badge on the item icon. Only set where
+// the product's origin is confirmed (from its catalog name or the retailer's
+// product page) — omitted rather than guessed for items without a stated origin.
+const ORIGIN_FLAG = {
+  'cucumber-uae':'🇦🇪', 'potato-local':'🇱🇧', 'onion-red-india':'🇮🇳',
+  'garlic-white-china':'🇨🇳', 'broccoli-spain':'🇪🇸',
+  'banana-chiquita-ecuador':'🇪🇨', 'lemon-south-africa':'🇿🇦',
+  'lamb-chops':'🇦🇺', 'beef-ribeye-australian':'🇦🇺', 'beef-ribeye-south-african':'🇿🇦',
+  'lamb-leg-boneless':'🇦🇺', 'beef-topside-australian':'🇦🇺', 'beef-topside-brazilian':'🇧🇷',
+  'beef-topside-south-african':'🇿🇦', 'beef-rump-australian':'🇦🇺', 'beef-knuckle-australian':'🇦🇺',
+  'beef-ribeye-wagyu':'🇦🇺', 'beef-cubes-australian':'🇦🇺', 'beef-liver-australian':'🇦🇺',
+  'lamb-shoulder':'🇦🇺', 'lamb-shank':'🇦🇺', 'lamb-mince':'🇦🇺', 'mutton-ribs-indian':'🇮🇳',
+  'salmon-fillet-norwegian':'🇳🇴', 'hammour-fillet':'🇦🇪', 'salmon-fillet-scottish':'🇬🇧',
+  'salmon-trout-fillet':'🇳🇴', 'rabbitfish-safi':'🇦🇪', 'tilapia-fresh':'🇪🇬',
+};
+function flagFor(it){ return ORIGIN_FLAG[it.id] || null; }
 
 function emptyPrices(){
   const o = {};
@@ -270,6 +292,17 @@ const CATALOG = {
     {id:'kingfish-steak', name:'Kingfish Steak (fresh)', cat:'Fish'},
     {id:'sea-bass-whole', name:'Sea Bass (fresh, whole)', cat:'Fish'},
     {id:'silver-pomfret', name:'Silver Pomfret (fresh, whole)', cat:'Fish'},
+    {id:'shrimp-large', name:'Shrimp, Large (fresh)', cat:'Fish'},
+    {id:'tiger-shrimp-large', name:'Tiger Shrimp, Large (fresh)', cat:'Fish'},
+    {id:'squid-fresh', name:'Squid (fresh)', cat:'Fish'},
+    {id:'crab-blue', name:'Crab, Blue (fresh)', cat:'Fish'},
+    {id:'mackerel-fresh', name:'Mackerel (fresh)', cat:'Fish'},
+    {id:'sardines-fresh', name:'Sardines (fresh)', cat:'Fish'},
+    {id:'rabbitfish-safi', name:'Rabbitfish, Safi (fresh, whole)', cat:'Fish'},
+    {id:'trevally-sherri', name:'Trevally, Sherri (fresh, whole)', cat:'Fish'},
+    {id:'tilapia-fresh', name:'Tilapia (fresh)', cat:'Fish'},
+    {id:'milk-fish-whole', name:'Milk Fish (fresh, whole)', cat:'Fish'},
+    {id:'red-mullet-sultan-ibrahim', name:'Red Mullet, Sultan Ibrahim (fresh, whole)', cat:'Fish'},
     // Meat (additional)
     {id:'beef-ribeye-australian', name:'Beef Ribeye Steak, Australian (fresh)', cat:'Meat'},
     {id:'beef-ribeye-south-african', name:'Beef Ribeye Steak, South African (fresh)', cat:'Meat'},
@@ -459,7 +492,7 @@ function renderTable(){
     return `<tr>
       <td>
         <div class="item-row">
-          <div class="item-icon ${CATEGORY_CLASS[it.cat]}">${iconFor(it)}</div>
+          <div class="item-icon ${CATEGORY_CLASS[it.cat]}">${iconFor(it)}${flagFor(it) ? `<span class="item-flag">${flagFor(it)}</span>` : ''}</div>
           <div class="item-text">
             <div class="item-name">${it.name}</div>
             <div class="item-cat">${it.cat}</div>
