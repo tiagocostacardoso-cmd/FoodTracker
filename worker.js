@@ -21,7 +21,7 @@
  *   6. Update ALLOWED_ORIGIN below to your GitHub Pages URL before deploying
  */
 
-const ALLOWED_ORIGIN = 'https://tiagocostacardoso-cmd.github.io'; // <-- set this
+const ALLOWED_ORIGIN = 'https://prices.tiagoacc.com'; // <-- set this
 
 function corsHeaders(origin) {
   const allow = origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN;
